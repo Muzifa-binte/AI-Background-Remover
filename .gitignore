@@ -42,6 +42,9 @@ desktop.ini
 *.swp
 *.swo
 
+# Kiro IDE (local AI assistant config — not for shared repo)
+.kiro/
+
 # Build artifacts
 dist/
 build/
