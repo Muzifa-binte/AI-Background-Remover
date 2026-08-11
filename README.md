@@ -1,318 +1,254 @@
 # AI Background Remover
 
-## 📌 Overview
-
-AI Background Remover is a computer vision-based web application that automatically removes the background from images using deep learning segmentation models. The system detects the primary subject in an uploaded image and generates a transparent PNG while preserving fine details such as hair, clothing edges, and object boundaries.
-
-The application is designed to provide a fast, accurate, and user-friendly solution for photographers, designers, e-commerce businesses, content creators, and anyone who needs professional-quality background removal.
+> **Commander:** QuantumLogics Labs  
+> **Organization:** [github.com/QuantumLogicsLabs](https://github.com/QuantumLogicsLabs)  
+> **Status:** Active development — Commander is building solo until teams are filled.
 
 ---
 
-# 🎯 Objectives
+## What This Project Is
 
-* Automatically remove image backgrounds using AI.
-* Produce high-quality transparent PNG images.
-* Preserve object details with smooth edge refinement.
-* Provide a responsive and easy-to-use web interface.
-* Deliver fast processing through optimized AI inference.
+A full-stack AI web application that removes image backgrounds automatically.  
+A user uploads a photo, the AI isolates the subject, and the app returns a transparent PNG — no manual masking needed.
 
----
-
-# ✨ Features
-
-### Core Features
-
-* AI-powered background removal
-* Drag-and-drop image upload
-* Image preview before processing
-* Transparent PNG output
-* One-click image download
-* High-quality edge refinement
-* Fast processing time
-* Support for multiple image formats
-
-### Additional Features
-
-* Background color replacement
-* Blur background effect
-* Custom background upload
-* Before & After comparison slider
-* Batch image processing
-* User authentication
-* Processing history
-* Responsive design
-* Dark mode support
+**Who it is for:** photographers, designers, e-commerce sellers, content creators.
 
 ---
 
-# ⚙️ Technology Stack
+## Repository Structure
 
-## Frontend
+This is the **parent repository**. It does not contain application code itself — it ties together three independent submodule repositories and holds shared configuration.
 
-* **React.js** – Builds a modern, responsive, and interactive user interface.
-* **TypeScript** – Provides type safety and improves code maintainability.
-* **Tailwind CSS** – Utility-first CSS framework for fast and responsive styling.
-* **Vite** – High-performance build tool for rapid development.
-* **Axios** – Handles communication between the frontend and backend APIs.
-* **React Dropzone** – Enables drag-and-drop image uploads with file validation.
-
----
-
-## Backend
-
-* **Python** – Core programming language for AI processing.
-* **FastAPI** – High-performance web framework for building RESTful APIs.
-* **Uvicorn** – Lightweight ASGI server used to run the FastAPI application.
-
----
-
-## AI & Computer Vision
-
-* **PyTorch** – Deep learning framework used to run AI segmentation models.
-* **OpenCV** – Performs image preprocessing and post-processing operations.
-* **Pillow (PIL)** – Reads, edits, and saves image files.
-* **NumPy** – Supports efficient numerical computations for image data.
-* **ONNX Runtime** – Optimizes AI model inference for faster performance.
-* **U²-Net / BiRefNet / RMBG-2.0** – AI segmentation models used for accurate background removal with high-quality edge refinement.
+```
+AI-Background-Remover/          ← you are here (parent repo)
+│
+├── frontend/                   ← submodule → AI-Background-Remover-frontend
+│   React + TypeScript + Tailwind + Vite
+│   Owned by: Web Team (UI)
+│
+├── backend/                    ← submodule → AI-Background-Remover-backend
+│   Python + FastAPI + MongoDB
+│   Owned by: Web Team (API)
+│
+├── AI-Background-Remover-AI/   ← submodule → AI-Background-Remover-AI
+│   PyTorch + ONNX + OpenCV + rembg
+│   Owned by: AI Team + ML Team
+│
+├── .gitmodules                 ← submodule URL declarations
+├── .gitattributes              ← line-ending rules (LF everywhere)
+├── requirements.txt            ← Python deps for backend + AI combined
+├── Dockerfile                  ← containerises backend + AI together
+├── .env.example                ← all environment variables documented
+├── CONTRIBUTING.md             ← git workflow, branch rules, PR process
+└── TEAM_WORKLOAD.md            ← who owns what, current build status
+```
 
 ---
 
-## Database
+## Three Teams, One Product
 
-* **MongoDB** – Stores user information, image metadata, processing history, and application-related data.
+| Team | Repo | What They Build |
+|------|------|-----------------|
+| **Web Team** | `frontend` | React UI — upload, preview, compare, download, history |
+| **Web Team** | `backend` | FastAPI — REST endpoints, file storage, MongoDB integration |
+| **AI Team** | `AI-Background-Remover-AI` | Inference pipeline — preprocessing, model run, postprocessing |
+| **ML Team** | `AI-Background-Remover-AI` | Model research — evaluate U²-Net, BiRefNet, RMBG-2.0, train/export |
+
+> **AI Team vs ML Team distinction:**  
+> - AI Team wires models into the pipeline (code, integration, optimization).  
+> - ML Team researches, trains, evaluates, and exports the actual model weights.  
+> Both work inside the same `AI-Background-Remover-AI` submodule but in separate folders — `pipeline/` vs `research/`.
 
 ---
 
-## API Communication
+## How Submodules Work
 
-* **REST API** – Enables secure communication between the React frontend and the FastAPI backend using HTTP requests.
+Each submodule is a fully independent Git repository with its own history, branches, and pull requests. The parent repo just records *which commit* of each submodule to point to.
+
+**Cloning the full project (all submodules):**
+```bash
+git clone --recurse-submodules https://github.com/QuantumLogicsLabs/AI-Background-Remover.git
+```
+
+**If you already cloned without submodules:**
+```bash
+git submodule update --init --recursive
+```
+
+**After a teammate pushes to a submodule and you want the parent to track the new commit:**
+```bash
+# Inside the submodule folder
+git pull origin main
+
+# Back in the parent repo
+cd ..
+git add frontend          # or backend / AI-Background-Remover-AI
+git commit -m "chore: update frontend submodule pointer"
+git push
+```
+
+> Team members work directly inside the submodule repos. They never touch the parent repo unless they are updating a submodule pointer.
 
 ---
 
-## Version Control
+## Full Tech Stack
 
-* **Git** – Tracks source code changes and manages project history.
-* **GitHub** – Hosts the project repository and supports collaboration.
+| Layer | Technology |
+|-------|-----------|
+| UI Framework | React 18 + TypeScript |
+| Styling | Tailwind CSS 3 + CSS custom properties |
+| Build Tool | Vite 5 |
+| HTTP Client | Axios |
+| File Upload | react-dropzone |
+| Routing | react-router-dom v6 |
+| API Framework | FastAPI 0.115 |
+| ASGI Server | Uvicorn |
+| Database | MongoDB (async via Motor) |
+| AI Runtime | PyTorch + ONNX Runtime |
+| Image Processing | OpenCV + Pillow + NumPy |
+| Segmentation Models | U²-Net / BiRefNet / RMBG-2.0 |
+| Quick Prototype | rembg (U²-Net wrapper) |
+| Deployment | Vercel (frontend) + Docker (backend+AI) |
+
+---
+
+## Local Setup (Full Stack)
+
+### Prerequisites
+- Python 3.11+
+- Node.js 20+
+- MongoDB running locally on port 27017
+
+### Step 1 — Clone with submodules
+```bash
+git clone --recurse-submodules https://github.com/QuantumLogicsLabs/AI-Background-Remover.git
+cd AI-Background-Remover
+```
+
+### Step 2 — Backend + AI environment
+```bash
+# Create and activate a virtual environment
+python -m venv .venv
+.venv\Scripts\activate          # Windows
+# source .venv/bin/activate     # Mac/Linux
+
+pip install -r requirements.txt
+
+# Copy environment files for each submodule
+cp backend/.env.example backend/.env
+cp AI-Background-Remover-AI/.env.example AI-Background-Remover-AI/.env
+
+# backend/.env  → set MONGO_URI if MongoDB is not on localhost
+# AI/.env       → MODEL_BACKEND=rembg is the default (no model file needed)
+```
+
+### Step 3 — Run the backend
+```bash
+cd backend
+uvicorn app:app --reload --port 8000
+```
+
+API docs available at: `http://localhost:8000/docs`
+
+### Step 4 — Frontend
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+App available at: `http://localhost:5173`
+
+---
+
+## API Endpoints (Summary)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/remove-background` | Upload image, get transparent PNG |
+| `GET` | `/api/download/{filename}` | Download a processed image |
+| `GET` | `/api/history` | Get processing history (last 50) |
+| `DELETE` | `/api/image/{id}` | Delete image from storage + history |
+| `GET` | `/` | Health check |
+
+Full interactive docs at `http://localhost:8000/docs` when the backend is running.
+
+---
+
+## AI Pipeline (Summary)
+
+```
+User uploads image
+        │
+        ▼
+  [Backend] Validate + save to uploads/
+        │
+        ▼
+  [AI] Preprocess — resize to 1024×1024, ImageNet normalize
+        │
+        ▼
+  [AI] Inference — run segmentation model (ONNX / PyTorch / rembg)
+        │
+        ▼
+  [AI] Postprocess — upsample mask, binarise, refine edges
+        │
+        ▼
+  [AI] Apply alpha channel → transparent PNG saved to output/
+        │
+        ▼
+  [Backend] Return download URL to frontend
+        │
+        ▼
+  [Frontend] Show result, comparison slider, download button
+```
+
+---
+
+## Environment Variables
+
+All variables are documented in `.env.example` at the root.  
+Copy it to `.env` before running the backend.
 
 ---
 
 ## Deployment
 
-* **Vercel** – Deploys and hosts the frontend application with automatic builds and continuous deployment.
-* **FastAPI Backend** – Can be deployed as an API service and connected seamlessly with the Vercel frontend.
+| Service | What it hosts |
+|---------|--------------|
+| Vercel | `frontend/` — auto-deploy on push to `main` |
+| Docker | `backend/` + `AI-Background-Remover-AI/` together |
 
----
-
-## Development Tools
-
-* **Visual Studio Code** – Primary code editor for development.
-* **Postman** – Tests and validates API endpoints.
-* **npm** – Manages frontend packages and dependencies.
-* **pip** – Manages Python packages and backend dependencies.
-* **Docker (Optional)** – Containerizes the application for consistent deployment across environments.
-
----
-
-## Project Architecture
-
-```text
-React + TypeScript + Tailwind CSS
-                │
-                ▼
-        REST API (Axios)
-                │
-                ▼
-      FastAPI (Python Backend)
-                │
-                ▼
-    AI Segmentation Model
- (U²-Net / BiRefNet / RMBG)
-                │
-                ▼
-      Image Processing Layer
-(OpenCV + Pillow + NumPy)
-                │
-                ▼
-   Transparent PNG Generation
-                │
-                ▼
-            MongoDB
- (Metadata & Processing History)
-                │
-                ▼
-             Vercel
-       (Frontend Deployment)
-```
-
-
-# 🤖 AI Workflow
-
-1. User uploads an image.
-2. The frontend sends the image to the FastAPI backend.
-3. The backend preprocesses the image by resizing and normalizing it.
-4. The AI segmentation model predicts the foreground mask.
-5. Post-processing refines edges and removes noise.
-6. The refined mask is applied to the original image.
-7. The system generates a transparent PNG.
-8. The processed image is returned to the frontend for preview and download.
-
----
-
-# 📂 Project Structure
-
-```text
-AI-Background-Remover/
-
-├── frontend/
-│   ├── src/
-│   ├── components/
-│   ├── pages/
-│   ├── hooks/
-│   └── assets/
-│
-├── backend/
-│   ├── app.py
-│   ├── routes/
-│   ├── services/
-│   ├── uploads/
-│   └── output/
-│
-├── ai/
-│   ├── inference.py
-│   ├── preprocessing.py
-│   ├── postprocessing.py
-│   └── models/
-│
-├── requirements.txt
-├── README.md
-└── Dockerfile
+```bash
+# Build and run with Docker
+docker build -t ai-bg-remover .
+docker run -p 8000:8000 --env-file .env ai-bg-remover
 ```
 
 ---
 
-# 🔄 Image Processing Pipeline
+## Project Roadmap
 
-```text
-Upload Image
-      │
-      ▼
-Preprocessing
-      │
-      ▼
-AI Segmentation Model
-      │
-      ▼
-Foreground Mask Generation
-      │
-      ▼
-Mask Refinement
-      │
-      ▼
-Background Removal
-      │
-      ▼
-Transparent PNG Output
-```
+- [x] AI inference pipeline (ONNX / PyTorch / rembg backends)
+- [x] FastAPI backend with all routes
+- [x] MongoDB history storage
+- [x] React frontend — upload, result, compare, download
+- [x] History page
+- [x] Dark mode
+- [ ] User authentication (JWT)
+- [ ] Background color / image replacement
+- [ ] Batch processing
+- [ ] Video background removal
+- [ ] Mobile app
 
 ---
 
-# 🌐 API Endpoints
+## Links
 
-### Upload Image
-
-```http
-POST /api/remove-background
-```
-
-Uploads an image and returns the processed image with the background removed.
-
----
-
-### Download Image
-
-```http
-GET /api/download/{filename}
-```
-
-Downloads the processed image.
-
----
-
-### Processing History
-
-```http
-GET /api/history
-```
-
-Returns the user's processed image history.
-
----
-
-### Delete Image
-
-```http
-DELETE /api/image/{id}
-```
-
-Deletes a processed image from storage.
-
----
-
-# 🚀 Future Enhancements
-
-* AI-generated backgrounds
-* Video background removal
-* Background replacement using text prompts
-* Portrait enhancement
-* Shadow generation
-* Object isolation
-* Batch image processing
-* Mobile application
-* Cloud storage integration
-* Premium subscription features
-
----
-
-# 🔒 Security Features
-
-* File type validation
-* Maximum upload size restriction
-* Secure image processing
-* Automatic temporary file deletion
-* API rate limiting
-* JWT-based authentication
-* HTTPS support
-
----
-
-# 📈 Performance Optimizations
-
-* ONNX Runtime for accelerated inference
-* GPU acceleration using CUDA
-* Image resizing before inference
-* Asynchronous request processing
-* Image caching
-* Optimized memory management
-
----
-
-# 🎓 Learning Outcomes
-
-This project demonstrates practical implementation of:
-
-* Computer Vision
-* Image Segmentation
-* Deep Learning Inference
-* REST API Development
-* Frontend and Backend Integration
-* AI Model Deployment
-* Image Processing Techniques
-* Cloud Deployment
-* Docker Containerization
-* Full-Stack AI Application Development
-
----
-
-# 📜 License
-
-This project is intended for educational, research, and portfolio purposes. It can be extended for commercial applications with the appropriate AI model licensing and deployment configuration.
+| Resource | URL |
+|----------|-----|
+| Parent repo | github.com/QuantumLogicsLabs/AI-Background-Remover |
+| Frontend repo | github.com/QuantumLogicsLabs/AI-Background-Remover-frontend |
+| Backend repo | github.com/QuantumLogicsLabs/AI-Background-Remover-backend |
+| AI repo | github.com/QuantumLogicsLabs/AI-Background-Remover-AI |
+| Contribution guide | [CONTRIBUTING.md](./CONTRIBUTING.md) |
+| Team workload | [TEAM_WORKLOAD.md](./TEAM_WORKLOAD.md) |

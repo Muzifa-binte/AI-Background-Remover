@@ -1,0 +1,56 @@
+# ============================================================
+# AI Background Remover — Root .gitignore
+# ============================================================
+
+# Python virtual environment (stored outside project at C:\Users\Lenovo\venvs\bgremover)
+# These entries are safety nets in case anyone accidentally creates one inside the project
+.venv/
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+
+# Environment variable files (contain secrets)
+.env
+*.env
+
+# Uploaded images (user data, not code)
+backend/uploads/
+backend/output/
+
+# AI model weights (too large for Git — share via Drive/HuggingFace)
+*.onnx
+*.pth
+*.pt
+*.ckpt
+*.safetensors
+AI-Background-Remover-AI/models/*
+!AI-Background-Remover-AI/models/.gitkeep
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+*.swp
+*.swo
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# Pytest
+.pytest_cache/
+htmlcov/
+.coverage
+
+# Node (frontend has its own .gitignore but just in case)
+node_modules/
