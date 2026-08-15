@@ -25,18 +25,26 @@ RUN pip install --no-cache-dir --upgrade pip \
  && pip install --no-cache-dir -r requirements.txt
 
 # ---- Application source ----------------------------------------
-COPY backend/ ./backend/
-COPY ai/       ./ai/
+COPY backend/           ./backend/
+COPY AI-Background-Remover-AI/ ./AI-Background-Remover-AI/
 
 # ---- Runtime directories (uploads & output persist via volume) --
 RUN mkdir -p backend/uploads backend/output
 
 # ---- Environment defaults --------------------------------------
 # Override these at runtime with -e flags or docker-compose env vars.
-ENV MODEL_BACKEND=onnx \
-    ONNX_MODEL_PATH=ai/models/model.onnx \
+ENV MODEL_BACKEND=rembg \
+    ONNX_MODEL_PATH=AI-Background-Remover-AI/models/model.onnx \
+    TORCH_MODEL_PATH=AI-Background-Remover-AI/models/model.pth \
     MONGO_URI=mongodb://mongo:27017 \
     MONGO_DB_NAME=ai_bg_remover \
+    ACCESS_TOKEN_EXPIRE_MINUTES=60 \
+    REFRESH_TOKEN_EXPIRE_DAYS=30 \
+    COOKIE_SECURE=true \
+    COOKIE_SAMESITE=none \
+    DAILY_QUOTA_LIMIT=100 \
+    FILE_MAX_AGE_HOURS=24 \
+    CLEANUP_INTERVAL_MINS=60 \
     PORT=8000
 
 # ---- Expose API port -------------------------------------------
