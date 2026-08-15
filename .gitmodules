@@ -6,3 +6,7 @@
 	path = backend
 	url = https://github.com/QuantumLogicsLabs/AI-Background-Remover-backend.git
 	branch = main
+[submodule "AI"]
+	path = AI
+	url = https://github.com/QuantumLogicsLabs/AI-Background-Remover-AI.git
+	branch = main
